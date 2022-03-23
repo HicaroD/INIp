@@ -1,5 +1,5 @@
 # INIp
-An INI parser library written in Rust.
+:pencil: An INI parser library written in Rust.
 
 ## Features
 
