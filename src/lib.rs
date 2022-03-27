@@ -23,9 +23,7 @@ impl Lexer {
                 '#' => tokens.push(Token::Hash),
                 token => tokens.push(Token::Unknown),
             }
-            file.next();
         }
-
         return tokens;
     }
 }
