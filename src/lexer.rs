@@ -18,7 +18,7 @@ impl Lexer {
         while let Some(token) = file.next() {
             match token {
                 '=' => tokens.push(Token::EqualSign),
-                '[' => tokens.push(Token::OpenSquareBracket),
+                '[' => tokens.push(Token::OpeningSquareBracket),
                 ']' => tokens.push(Token::ClosingSquareBracket),
                 '#' => tokens.push(Token::Hash),
                 token => {
