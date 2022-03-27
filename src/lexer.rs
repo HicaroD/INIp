@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub enum Token {
-    OpenSquareBracket,
+    OpeningSquareBracket,
     ClosingSquareBracket,
     Hash,
     EqualSign,
