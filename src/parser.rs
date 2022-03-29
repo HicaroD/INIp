@@ -6,14 +6,7 @@ pub struct Parser {}
 
 impl Parser {
     fn read_file<S: Into<String>>(file_path: S) -> std::io::Result<String> {
-        let file = match fs::File::open(file_path.into()) {
-            Ok(f) => f,
-            Err(e) => {
-                eprintln!("Unable to open file. Error: {e}");
-                std::process::exit(1);
-            }
-        };
-
+        let file = fs::File::open(file_path.into())?;
         let file_reader = BufReader::new(file);
         let mut file_content = String::new();
 
