@@ -1,6 +1,6 @@
+use crate::lexer::*;
 use std::fs;
 use std::io::{BufRead, BufReader};
-use crate::lexer::*;
 
 pub struct Parser {}
 
