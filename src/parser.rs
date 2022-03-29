@@ -16,7 +16,7 @@ impl Parser {
                 file_content.push_str(&line_content);
             }
         }
-        return Ok(file_content);
+        Ok(file_content)
     }
 
     pub fn parse<S: Into<String>>(file_path: S) -> std::io::Result<()> {
