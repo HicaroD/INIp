@@ -1,6 +1,9 @@
 use crate::lexer::*;
 use std::fs;
 use std::io::{BufRead, BufReader};
+use std::collections::HashMap;
+
+type INI = HashMap<String, Option<HashMap<String, String>>>;
 
 pub struct Parser {}
 
@@ -22,9 +25,27 @@ impl Parser {
     pub fn parse<S: Into<String>>(file_path: S) -> std::io::Result<()> {
         let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
+        let mut tokens = tokens.iter();
 
-        for token in tokens.iter() {
-            println!("{:?}", token);
+        let mut ini_file: INI = HashMap::new(); 
+
+        while let Some(token) = tokens.next() { 
+            match token {
+                Token::OpeningSquareBracket => {
+                    if let Some(Token::Identifier(ident)) = tokens.next() {
+                        // TODO(Hícaro): Add new section to INI HashMap
+                        println!("It is an identifier");
+                    } else { 
+                        //TODO(Hícaro): Add custom error handling to unexpected token
+                        println!("It shouldn't happen. The next token should be an identifier");
+                    } 
+                },
+                Token::ClosingSquareBracket => println!("Closing square bracket"), 
+                Token::Hash => println!("Hash"), 
+                Token::EqualSign => println!("Equal sign"),
+                Token::Identifier(ident) => println!("Identifier: {ident}"),
+                Token::Unknown(unknown_token) => println!("Unknown token: {unknown_token}"),
+            }
         }
         Ok(())
     }
