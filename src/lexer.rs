@@ -29,14 +29,12 @@ impl Lexer {
                             identifier.push(t);
                         }
                         tokens.push(Token::Identifier(identifier));
-                    } else {
-                        if !token.is_whitespace() {
-                            tokens.push(Token::Unknown(token));
-                        }
+                    } else if !token.is_whitespace() {
+                        tokens.push(Token::Unknown(token));
                     }
                 }
             }
         }
-        return tokens;
+        tokens
     }
 }
