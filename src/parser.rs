@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::io::{BufRead, BufReader};
 
-type INI = HashMap<String, Option<HashMap<String, String>>>;
+type Ini = HashMap<String, Option<HashMap<String, String>>>;
 
 pub struct Parser {}
 
@@ -27,14 +27,14 @@ impl Parser {
         let tokens = Lexer::tokenize(file_content);
         let mut tokens = tokens.iter();
 
-        let mut ini_file: INI = HashMap::new();
+        let mut ini_file: Ini = HashMap::new();
 
         while let Some(token) = tokens.next() {
             match token {
                 Token::OpeningSquareBracket => {
                     if let Some(Token::Identifier(ident)) = tokens.next() {
-                        // TODO(Hícaro): Add new section to INI HashMap
-                        println!("It is an identifier");
+                        // TODO(Hícaro): Add new section to Ini HashMap
+                        println!("It is an identifier. Value: {ident}");
                     } else {
                         //TODO(Hícaro): Add custom error handling to unexpected token
                         println!("It shouldn't happen. The next token should be an identifier");
