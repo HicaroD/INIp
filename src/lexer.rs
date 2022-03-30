@@ -12,7 +12,7 @@ pub struct Lexer {}
 
 impl Lexer {
     pub fn tokenize(source_file: String) -> Vec<Token> {
-        let mut tokens: Vec<Token> = vec![];
+        let mut tokens: Vec<Token> = Vec::new();
         let mut file = source_file.chars().peekable();
 
         while let Some(token) = file.next() {
