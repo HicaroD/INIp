@@ -28,13 +28,18 @@ impl Parser {
         let mut tokens = tokens.iter();
 
         let mut ini_file: Ini = HashMap::new();
+        let mut sections = Vec::new();
 
         while let Some(token) = tokens.next() {
             match token {
                 Token::OpeningSquareBracket => {
-                    if let Some(Token::Identifier(ident)) = tokens.next() {
+                    if let Some(Token::Identifier(section_name)) = tokens.next() {
                         // TODO(Hícaro): Add new section to Ini HashMap
-                        println!("It is an identifier. Value: {ident}");
+                        println!("It is a new section declaration. Value: {section_name}");
+                        sections.push(section_name);
+                        if !ini_file.contains_key(section_name) {
+                            ini_file.insert(section_name.to_string(), None);
+                        }
                     } else {
                         //TODO(Hícaro): Add custom error handling to unexpected token
                         println!("It shouldn't happen. The next token should be an identifier");
