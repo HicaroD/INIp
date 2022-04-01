@@ -55,18 +55,24 @@ impl Parser {
                             // TODO(Hícaro): Implement key-value pair on section
 
                             // 1. Se as seções forem vazias, então eu tenho um key-value pair fora de
-                            // uma seção. Logo, isso não deve ser válido em meu INI file.
-                            
+                            //    uma seção. Logo, isso não deve ser válido em meu INI file.
+
                             // 2. Se eu tentar inserir em seção existente que aponta para None, eu
-                            // precisarei criar uma nova HashMap dentro da key da seção.
-                            
+                            //    precisarei criar uma nova HashMap dentro da key da seção e
+                            //    adicionar meus dados lá.
+
                             // 3. Se eu tentar inserir em uma seção existente que aponta para uma
-                            // HashMap existente, eu preciso inserir meu valor nessa nova HashMap
+                            //    HashMap existente, eu preciso inserir meu valor nessa HashMap.
+
+                            // 4. Se eu tiver tentando adicionar elementos a alguma seção já
+                            //    existente, eu preciso checar pela presença de keys existentes.
+                            //    Se eu tiver tentando adicionar a uma key existente, então eu devo
+                            //    reescrever o valor dessa key ao invés de gerar um erro.
                             println!("Add new key-value to {:?}", sections.last());
                         } else {
                             println!("Should be an identifier.")
                         }
-                    } 
+                    }
                 }
                 Token::Unknown(token) => println!("Unknown token: {:?}", token),
             }
