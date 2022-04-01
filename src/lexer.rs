@@ -25,7 +25,9 @@ impl Lexer {
                     let mut identifier = String::new();
                     if token.is_alphanumeric() {
                         identifier.push(token);
-                        while let Some(t) = file.next_if(|x| x.is_alphanumeric() || x.is_whitespace()) {
+                        while let Some(t) =
+                            file.next_if(|x| x.is_alphanumeric() || x.is_whitespace())
+                        {
                             identifier.push(t);
                         }
                         tokens.push(Token::Identifier(identifier));
