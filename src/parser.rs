@@ -1,9 +1,9 @@
 use crate::lexer::*;
-use std::collections::HashMap;
-use std::fs;
-use std::fmt;
-use std::io::{BufRead, BufReader};
 use crate::parser::ParserError::*;
+use std::collections::HashMap;
+use std::fmt;
+use std::fs;
+use std::io::{BufRead, BufReader};
 
 type Section = HashMap<String, String>;
 type Ini = HashMap<String, Section>;
@@ -57,11 +57,7 @@ impl Parser {
         }
     }
 
-    fn add_value_to_section<'a>(
-        section: &mut Section,
-        key: &'a str,
-        value: &'a str,
-    ) {
+    fn add_value_to_section<'a>(section: &mut Section, key: &'a str, value: &'a str) {
         if section.is_empty() || !section.contains_key(key) {
             section.insert(key.to_string(), value.to_string());
         } else if let Some(key_value) = section.get_mut(key) {
