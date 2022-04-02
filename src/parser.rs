@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::io::{BufRead, BufReader};
 
-type Ini = HashMap<String, Option<HashMap<String, String>>>;
+type Ini = HashMap<String, HashMap<String, String>>;
 
 pub struct Parser {}
 
@@ -22,7 +22,7 @@ impl Parser {
         Ok(file_content)
     }
 
-    pub fn parse<S: Into<String>>(file_path: S) -> std::io::Result<()> {
+    pub fn parse<S: Into<String>>(file_path: S) -> std::io::Result<Ini> {
         let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
         let mut tokens = tokens.iter();
@@ -34,49 +34,46 @@ impl Parser {
             match token {
                 Token::OpeningSquareBracket => {
                     if let Some(Token::Identifier(section_name)) = tokens.next() {
-                        // TODO(Hícaro): Add new section to Ini HashMap
-                        println!("It is a new section declaration. Value: {section_name}");
+                        println!("It is a section declaration. Value: {section_name}");
                         sections.push(section_name);
                         if !ini_file.contains_key(section_name) {
-                            ini_file.insert(section_name.to_string(), None);
+                            println!("Adding new section: {section_name}");
+                            ini_file.insert(section_name.to_string(), HashMap::new());
                         }
                     } else {
                         //TODO(Hícaro): Add custom error handling to unexpected token
                         println!("It shouldn't happen. The next token should be an identifier");
                     }
                 }
-                Token::ClosingSquareBracket => println!("Closing square bracket"),
-                Token::Hash => println!("Hash"),
-                Token::EqualSign => println!("Equal sign"),
                 Token::Identifier(key) => {
                     if let Some(Token::EqualSign) = tokens.next() {
-                        // Cheque se o próximo é também um identifier
                         if let Some(Token::Identifier(value)) = tokens.next() {
-                            // TODO(Hícaro): Implement key-value pair on section
+                            let last_section_added = match sections.last() {
+                                Some(section_name) => section_name,
+                                None => {
+                                    println!("No sections were added.");
+                                    std::process::exit(1); 
+                                }
+                            };
 
-                            // 1. Se as seções forem vazias, então eu tenho um key-value pair fora de
-                            //    uma seção. Logo, isso não deve ser válido em meu INI file.
-
-                            // 2. Se eu tentar inserir em seção existente que aponta para None, eu
-                            //    precisarei criar uma nova HashMap dentro da key da seção e
-                            //    adicionar meus dados lá.
-
-                            // 3. Se eu tentar inserir em uma seção existente que aponta para uma
-                            //    HashMap existente, eu preciso inserir meu valor nessa HashMap.
-
-                            // 4. Se eu tiver tentando adicionar elementos a alguma seção já
-                            //    existente, eu preciso checar pela presença de keys existentes.
-                            //    Se eu tiver tentando adicionar a uma key existente, então eu devo
-                            //    reescrever o valor dessa key ao invés de gerar um erro.
-                            println!("Add new key-value to {:?}", sections.last());
+                            if let Some(section) = ini_file.get_mut(*last_section_added) { 
+                                if section.is_empty() || !section.contains_key(key) { 
+                                    section.insert(key.to_string(), value.to_string());
+                                    println!("Add key '{}' and value '{}' on {}", key, value, *last_section_added);
+                                } else if let Some(key_value) = section.get_mut(key) {
+                                    *key_value = value.to_string();
+                                    println!("Changing existing key to '{}'", key_value);
+                                }
+                            }
                         } else {
                             println!("Should be an identifier.")
                         }
                     }
-                }
+                },
                 Token::Unknown(token) => println!("Unknown token: {:?}", token),
+                token => println!("Token: {:?}", token),
             }
         }
-        Ok(())
+        Ok(ini_file)
     }
 }
