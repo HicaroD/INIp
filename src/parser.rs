@@ -12,15 +12,23 @@ type Ini = HashMap<String, Section>;
 pub enum ParserError {
     UnexpectedToken(char),
     ExpectedAnIdentifier,
+    Io(std::io::Error),
 }
 
 impl std::error::Error for ParserError {}
 
+impl From<std::io::Error> for ParserError {
+    fn from(err: std::io::Error) -> ParserError {
+        ParserError::Io(err)
+    }
+}
+
 impl fmt::Display for ParserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
+        match self {
             UnexpectedToken(t) => write!(f, "Unexpected token: {t}"),
             ExpectedAnIdentifier => write!(f, "Expected an identifier"),
+            Io(e) => write!(f, "{e}"),
         }
     }
 }
@@ -62,13 +70,7 @@ impl Parser {
     }
 
     pub fn parse<S: Into<String>>(file_path: S) -> Result<Ini, ParserError> {
-        let file_content = match Parser::read_file(file_path) {
-            Ok(content) => content,
-            Err(e) => {
-                eprintln!("{e}");
-                std::process::exit(1);
-            }
-        };
+        let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
         let mut tokens = tokens.iter();
 
