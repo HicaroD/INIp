@@ -12,7 +12,7 @@ pub struct Lexer {}
 
 impl Lexer {
     pub fn tokenize(source_file: String) -> Vec<Token> {
-        let mut tokens: Vec<Token> = vec![];
+        let mut tokens: Vec<Token> = Vec::new();
         let mut file = source_file.chars().peekable();
 
         while let Some(token) = file.next() {
@@ -25,10 +25,12 @@ impl Lexer {
                     let mut identifier = String::new();
                     if token.is_alphanumeric() {
                         identifier.push(token);
-                        while let Some(t) = file.next_if(|x| x.is_alphanumeric()) {
+                        while let Some(t) =
+                            file.next_if(|x| x.is_alphanumeric() || x.is_whitespace())
+                        {
                             identifier.push(t);
                         }
-                        tokens.push(Token::Identifier(identifier));
+                        tokens.push(Token::Identifier(identifier.trim_end().to_string()));
                     } else if !token.is_whitespace() {
                         tokens.push(Token::Unknown(token));
                     }
