@@ -3,10 +3,10 @@
 
 ## Features
 
-| Feature                    | Implemented? |
-|----------------------------|--------------|
-| Sections support           | :x:          |
-| Disabled entry recognition | :x:          |
+| Feature                    | Implemented?       |
+|----------------------------|--------------------|
+| Sections support           | :heavy_check_mark: |
+| Disabled entry recognition | :x:                |
 
 ## License
 This project is licensed under the [MIT](LICENSE) license.
