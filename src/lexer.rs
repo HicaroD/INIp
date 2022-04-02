@@ -30,7 +30,7 @@ impl Lexer {
                         {
                             identifier.push(t);
                         }
-                        tokens.push(Token::Identifier(identifier));
+                        tokens.push(Token::Identifier(identifier.trim_end().to_string()));
                     } else if !token.is_whitespace() {
                         tokens.push(Token::Unknown(token));
                     }
