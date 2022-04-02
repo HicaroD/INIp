@@ -80,7 +80,7 @@ impl Parser {
                 if let Some(Token::Identifier(section_name)) = tokens.next() {
                     Parser::add_section(&mut ini_file, &mut sections, section_name);
                 } else {
-                    println!("It shouldn't happen. The next token should be an identifier");
+                    return Err(ParserError::ExpectedAnIdentifier);
                 }
             } else if let Token::Identifier(key) = token {
                 if let Some(Token::EqualSign) = tokens.next() {
