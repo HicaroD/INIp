@@ -22,6 +22,13 @@ impl Parser {
         Ok(file_content)
     }
 
+    fn add_section(ini_file: &mut Ini, sections: &mut Vec<String>, section_name: &str) {
+        sections.push(section_name.to_string());
+        if !ini_file.contains_key(section_name) {
+            ini_file.insert(section_name.to_string(), HashMap::new());
+        }
+    }
+
     pub fn parse<S: Into<String>>(file_path: S) -> std::io::Result<Ini> {
         let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
@@ -33,14 +40,8 @@ impl Parser {
         while let Some(token) = tokens.next() {
             if let Token::OpeningSquareBracket = token {
                 if let Some(Token::Identifier(section_name)) = tokens.next() {
-                    println!("It is a section declaration. Value: {section_name}");
-                    sections.push(section_name);
-                    if !ini_file.contains_key(section_name) {
-                        println!("Adding new section: {section_name}");
-                        ini_file.insert(section_name.to_string(), HashMap::new());
-                    }
+                    Parser::add_section(&mut ini_file, &mut sections, section_name);
                 } else {
-                    //TODO(Hícaro): Add custom error handling to unexpected token
                     println!("It shouldn't happen. The next token should be an identifier");
                 }
             } else if let Token::Identifier(key) = token {
@@ -54,7 +55,7 @@ impl Parser {
                             }
                         };
 
-                        if let Some(section) = ini_file.get_mut(*last_section_added) {
+                        if let Some(section) = ini_file.get_mut(last_section_added) {
                             if section.is_empty() || !section.contains_key(key) {
                                 section.insert(key.to_string(), value.to_string());
                                 println!(
