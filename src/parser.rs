@@ -31,47 +31,47 @@ impl Parser {
         let mut sections = Vec::new();
 
         while let Some(token) = tokens.next() {
-            match token {
-                Token::OpeningSquareBracket => {
-                    if let Some(Token::Identifier(section_name)) = tokens.next() {
-                        println!("It is a section declaration. Value: {section_name}");
-                        sections.push(section_name);
-                        if !ini_file.contains_key(section_name) {
-                            println!("Adding new section: {section_name}");
-                            ini_file.insert(section_name.to_string(), HashMap::new());
+            if let Token::OpeningSquareBracket = token {
+                if let Some(Token::Identifier(section_name)) = tokens.next() {
+                    println!("It is a section declaration. Value: {section_name}");
+                    sections.push(section_name);
+                    if !ini_file.contains_key(section_name) {
+                        println!("Adding new section: {section_name}");
+                        ini_file.insert(section_name.to_string(), HashMap::new());
+                    }
+                } else {
+                    //TODO(Hícaro): Add custom error handling to unexpected token
+                    println!("It shouldn't happen. The next token should be an identifier");
+                }
+            }
+
+            else if let Token::Identifier(key) = token {
+                if let Some(Token::EqualSign) = tokens.next() {
+                    if let Some(Token::Identifier(value)) = tokens.next() {
+                        let last_section_added = match sections.last() {
+                            Some(section_name) => section_name,
+                            None => {
+                                println!("No sections were added.");
+                                std::process::exit(1); 
+                            }
+                        };
+
+                        if let Some(section) = ini_file.get_mut(*last_section_added) { 
+                            if section.is_empty() || !section.contains_key(key) { 
+                                section.insert(key.to_string(), value.to_string());
+                                println!("Add key '{}' and value '{}' on {}", key, value, *last_section_added);
+                            } else if let Some(key_value) = section.get_mut(key) {
+                                *key_value = value.to_string();
+                                println!("Changing existing key to '{}'", key_value);
+                            }
                         }
                     } else {
-                        //TODO(Hícaro): Add custom error handling to unexpected token
-                        println!("It shouldn't happen. The next token should be an identifier");
+                        println!("Should be an identifier.")
                     }
                 }
-                Token::Identifier(key) => {
-                    if let Some(Token::EqualSign) = tokens.next() {
-                        if let Some(Token::Identifier(value)) = tokens.next() {
-                            let last_section_added = match sections.last() {
-                                Some(section_name) => section_name,
-                                None => {
-                                    println!("No sections were added.");
-                                    std::process::exit(1); 
-                                }
-                            };
-
-                            if let Some(section) = ini_file.get_mut(*last_section_added) { 
-                                if section.is_empty() || !section.contains_key(key) { 
-                                    section.insert(key.to_string(), value.to_string());
-                                    println!("Add key '{}' and value '{}' on {}", key, value, *last_section_added);
-                                } else if let Some(key_value) = section.get_mut(key) {
-                                    *key_value = value.to_string();
-                                    println!("Changing existing key to '{}'", key_value);
-                                }
-                            }
-                        } else {
-                            println!("Should be an identifier.")
-                        }
-                    }
-                },
-                Token::Unknown(token) => println!("Unknown token: {:?}", token),
-                token => println!("Token: {:?}", token),
+            }
+            else if let Token::Unknown(t) = token {
+                println!("Unexpected token: '{}'", t);
             }
         }
         Ok(ini_file)
