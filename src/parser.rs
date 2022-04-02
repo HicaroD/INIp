@@ -11,6 +11,7 @@ type Ini = HashMap<String, Section>;
 #[derive(Debug)]
 pub enum ParserError {
     UnexpectedToken(char),
+    ExpectedAnIdentifier,
 }
 
 impl std::error::Error for ParserError {}
@@ -19,6 +20,7 @@ impl fmt::Display for ParserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UnexpectedToken(t) => write!(f, "Unexpected token: {t}"),
+            ExpectedAnIdentifier => write!(f, "Expected an identifier"),
         }
     }
 }
@@ -95,7 +97,7 @@ impl Parser {
                             Parser::add_value_to_section(section, key, value);
                         }
                     } else {
-                        println!("Should be an identifier.")
+                        return Err(ParserError::ExpectedAnIdentifier);
                     }
                 }
             } else if let Token::Unknown(t) = token {
