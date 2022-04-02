@@ -1,9 +1,37 @@
 use crate::lexer::*;
 use std::collections::HashMap;
 use std::fs;
+use std::fmt;
 use std::io::{BufRead, BufReader};
+use crate::parser::ParserError::*;
 
-type Ini = HashMap<String, HashMap<String, String>>;
+type Section = HashMap<String, String>;
+type Ini = HashMap<String, Section>;
+
+#[derive(Debug)]
+pub enum ParserError {
+    UnexpectedToken(char),
+    ExpectedAnIdentifier,
+    Io(std::io::Error),
+}
+
+impl std::error::Error for ParserError {}
+
+impl From<std::io::Error> for ParserError {
+    fn from(err: std::io::Error) -> ParserError {
+        ParserError::Io(err)
+    }
+}
+
+impl fmt::Display for ParserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            UnexpectedToken(t) => write!(f, "Unexpected token: {t}"),
+            ExpectedAnIdentifier => write!(f, "Expected an identifier"),
+            Io(e) => write!(f, "{e}"),
+        }
+    }
+}
 
 pub struct Parser {}
 
@@ -22,7 +50,26 @@ impl Parser {
         Ok(file_content)
     }
 
-    pub fn parse<S: Into<String>>(file_path: S) -> std::io::Result<Ini> {
+    fn add_section(ini_file: &mut Ini, sections: &mut Vec<String>, section_name: &str) {
+        sections.push(section_name.to_string());
+        if !ini_file.contains_key(section_name) {
+            ini_file.insert(section_name.to_string(), HashMap::new());
+        }
+    }
+
+    fn add_value_to_section<'a>(
+        section: &mut Section,
+        key: &'a str,
+        value: &'a str,
+    ) {
+        if section.is_empty() || !section.contains_key(key) {
+            section.insert(key.to_string(), value.to_string());
+        } else if let Some(key_value) = section.get_mut(key) {
+            *key_value = value.to_string();
+        }
+    }
+
+    pub fn parse<S: Into<String>>(file_path: S) -> Result<Ini, ParserError> {
         let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
         let mut tokens = tokens.iter();
@@ -33,45 +80,30 @@ impl Parser {
         while let Some(token) = tokens.next() {
             if let Token::OpeningSquareBracket = token {
                 if let Some(Token::Identifier(section_name)) = tokens.next() {
-                    println!("It is a section declaration. Value: {section_name}");
-                    sections.push(section_name);
-                    if !ini_file.contains_key(section_name) {
-                        println!("Adding new section: {section_name}");
-                        ini_file.insert(section_name.to_string(), HashMap::new());
-                    }
+                    Parser::add_section(&mut ini_file, &mut sections, section_name);
                 } else {
-                    //TODO(Hícaro): Add custom error handling to unexpected token
-                    println!("It shouldn't happen. The next token should be an identifier");
+                    return Err(ParserError::ExpectedAnIdentifier);
                 }
-            }
-
-            else if let Token::Identifier(key) = token {
+            } else if let Token::Identifier(key) = token {
                 if let Some(Token::EqualSign) = tokens.next() {
                     if let Some(Token::Identifier(value)) = tokens.next() {
                         let last_section_added = match sections.last() {
                             Some(section_name) => section_name,
                             None => {
                                 println!("No sections were added.");
-                                std::process::exit(1); 
+                                std::process::exit(1);
                             }
                         };
 
-                        if let Some(section) = ini_file.get_mut(*last_section_added) { 
-                            if section.is_empty() || !section.contains_key(key) { 
-                                section.insert(key.to_string(), value.to_string());
-                                println!("Add key '{}' and value '{}' on {}", key, value, *last_section_added);
-                            } else if let Some(key_value) = section.get_mut(key) {
-                                *key_value = value.to_string();
-                                println!("Changing existing key to '{}'", key_value);
-                            }
+                        if let Some(section) = ini_file.get_mut(last_section_added) {
+                            Parser::add_value_to_section(section, key, value);
                         }
                     } else {
-                        println!("Should be an identifier.")
+                        return Err(ParserError::ExpectedAnIdentifier);
                     }
                 }
-            }
-            else if let Token::Unknown(t) = token {
-                println!("Unexpected token: '{}'", t);
+            } else if let Token::Unknown(t) = token {
+                return Err(ParserError::UnexpectedToken(*t));
             }
         }
         Ok(ini_file)
