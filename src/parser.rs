@@ -1,10 +1,27 @@
 use crate::lexer::*;
 use std::collections::HashMap;
 use std::fs;
+use std::fmt;
 use std::io::{BufRead, BufReader};
+use crate::parser::ParserError::*;
 
 type Section = HashMap<String, String>;
 type Ini = HashMap<String, Section>;
+
+#[derive(Debug)]
+pub enum ParserError {
+    UnexpectedToken(char),
+}
+
+impl std::error::Error for ParserError {}
+
+impl fmt::Display for ParserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UnexpectedToken(t) => write!(f, "Unexpected token: {t}"),
+        }
+    }
+}
 
 pub struct Parser {}
 
@@ -42,8 +59,14 @@ impl Parser {
         }
     }
 
-    pub fn parse<S: Into<String>>(file_path: S) -> std::io::Result<Ini> {
-        let file_content = Parser::read_file(file_path)?;
+    pub fn parse<S: Into<String>>(file_path: S) -> Result<Ini, ParserError> {
+        let file_content = match Parser::read_file(file_path) {
+            Ok(content) => content,
+            Err(e) => {
+                eprintln!("{e}");
+                std::process::exit(1);
+            }
+        };
         let tokens = Lexer::tokenize(file_content);
         let mut tokens = tokens.iter();
 
@@ -76,7 +99,7 @@ impl Parser {
                     }
                 }
             } else if let Token::Unknown(t) = token {
-                println!("Unexpected token: '{}'", t);
+                return Err(ParserError::UnexpectedToken(*t));
             }
         }
         Ok(ini_file)
