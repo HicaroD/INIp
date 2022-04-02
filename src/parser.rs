@@ -3,7 +3,8 @@ use std::collections::HashMap;
 use std::fs;
 use std::io::{BufRead, BufReader};
 
-type Ini = HashMap<String, HashMap<String, String>>;
+type Section = HashMap<String, String>;
+type Ini = HashMap<String, Section>;
 
 pub struct Parser {}
 
@@ -26,6 +27,18 @@ impl Parser {
         sections.push(section_name.to_string());
         if !ini_file.contains_key(section_name) {
             ini_file.insert(section_name.to_string(), HashMap::new());
+        }
+    }
+
+    fn add_value_to_section<'a>(
+        section: &mut Section,
+        key: &'a str,
+        value: &'a str,
+    ) {
+        if section.is_empty() || !section.contains_key(key) {
+            section.insert(key.to_string(), value.to_string());
+        } else if let Some(key_value) = section.get_mut(key) {
+            *key_value = value.to_string();
         }
     }
 
@@ -56,16 +69,7 @@ impl Parser {
                         };
 
                         if let Some(section) = ini_file.get_mut(last_section_added) {
-                            if section.is_empty() || !section.contains_key(key) {
-                                section.insert(key.to_string(), value.to_string());
-                                println!(
-                                    "Add key '{}' and value '{}' on {}",
-                                    key, value, *last_section_added
-                                );
-                            } else if let Some(key_value) = section.get_mut(key) {
-                                *key_value = value.to_string();
-                                println!("Changing existing key to '{}'", key_value);
-                            }
+                            Parser::add_value_to_section(section, key, value);
                         }
                     } else {
                         println!("Should be an identifier.")
