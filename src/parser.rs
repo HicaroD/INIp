@@ -13,6 +13,7 @@ pub enum ParserError {
     UnexpectedToken(char),
     ExpectedAnIdentifier,
     Io(std::io::Error),
+    NoSectionAdded,
 }
 
 impl std::error::Error for ParserError {}
@@ -29,6 +30,7 @@ impl fmt::Display for ParserError {
             UnexpectedToken(t) => write!(f, "Unexpected token: {t}"),
             ExpectedAnIdentifier => write!(f, "Expected an identifier"),
             Io(e) => write!(f, "{e}"),
+            NoSectionAdded => write!(f, "Any section is available to add a key-value pair."),
         }
     }
 }
@@ -83,13 +85,7 @@ impl Parser {
             } else if let Token::Identifier(key) = token {
                 if let Some(Token::EqualSign) = tokens.next() {
                     if let Some(Token::Identifier(value)) = tokens.next() {
-                        let last_section_added = match sections.last() {
-                            Some(section_name) => section_name,
-                            None => {
-                                println!("No sections were added.");
-                                std::process::exit(1);
-                            }
-                        };
+                        let last_section_added = sections.last().ok_or(ParserError::NoSectionAdded)?;
 
                         if let Some(section) = ini_file.get_mut(last_section_added) {
                             Parser::add_value_to_section(section, key, value);
