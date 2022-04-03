@@ -30,10 +30,10 @@ mod tests {
             HashMap::from([("value".to_string(), "10".to_string())]),
         );
         expected_result.insert(
-            "section".to_string(),
+            "Important section".to_string(),
             HashMap::from([
                 ("something".to_string(), "30".to_string()),
-                ("name".to_string(), "Hicaro".to_string()),
+                ("name".to_string(), "Hicaro Dânrlley".to_string()),
             ]),
         );
 
