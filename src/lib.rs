@@ -23,7 +23,7 @@ mod tests {
 
     #[test]
     fn test_parser() {
-        let parsed_file = Parser::parse("example.ini").unwrap();
+        let parsed_file = Parser::parse("examples/valid/example.ini").unwrap();
         let mut expected_result = HashMap::new();
         expected_result.insert(
             "Hicaro".to_string(),
@@ -38,5 +38,11 @@ mod tests {
         );
 
         assert_eq!(parsed_file, expected_result);
+    }
+
+    #[test]
+    fn test_double_square_bracket_on_section() {
+        let parsed_file = Parser::parse("examples/invalid/example.ini");
+        assert!(parsed_file.is_err());
     }
 }
