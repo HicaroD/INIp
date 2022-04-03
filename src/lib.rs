@@ -22,7 +22,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parser() {
+    fn test_parser_on_valid_file() {
         let parsed_file = Parser::parse("examples/valid/example.ini").unwrap();
         let mut expected_result = HashMap::new();
         expected_result.insert(
