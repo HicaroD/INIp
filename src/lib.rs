@@ -41,7 +41,7 @@ mod tests {
     }
 
     #[test]
-    fn test_double_square_bracket_on_section() {
+    fn test_double_square_bracket_on_section_declaration() {
         let parsed_file = Parser::parse("examples/invalid/example.ini");
         assert!(parsed_file.is_err());
     }
