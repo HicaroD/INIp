@@ -71,10 +71,6 @@ impl Parser {
         let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
 
-        for token in tokens.iter() {
-            println!("{:?}", token);
-        }
-
         let mut tokens = tokens.iter();
 
         let mut ini_file: Ini = HashMap::new();
