@@ -36,7 +36,6 @@ mod tests {
                 ("name".to_string(), "Hicaro Dânrlley".to_string()),
             ]),
         );
-
         assert_eq!(parsed_file, expected_result);
     }
 
@@ -44,5 +43,17 @@ mod tests {
     fn test_double_square_bracket_on_section_declaration() {
         let parsed_file = Parser::parse("examples/invalid/example.ini");
         assert!(parsed_file.is_err());
+    }
+
+    #[test]
+    fn test_invalid_equal_sign_before_key_declaration() {
+        let parsed_file = Parser::parse("examples/invalid/example1.ini");
+        assert!(parsed_file.is_err());
+    }
+
+    #[test]
+    fn test_value_with_quotes() {
+        let parsed_file = Parser::parse("examples/invalid/example2.ini");
+        assert!(!parsed_file.is_err());
     }
 }
