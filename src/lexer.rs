@@ -21,6 +21,14 @@ impl Lexer {
                 '[' => tokens.push(Token::OpeningSquareBracket),
                 ']' => tokens.push(Token::ClosingSquareBracket),
                 '#' => tokens.push(Token::Hash),
+                '\'' | '\"' => {
+                    let mut identifier = String::new();
+                    while let Some(t) = file.next_if(|x| *x != '\'' || *x != '\"') {
+                        identifier.push(t);
+                    }
+                    identifier = identifier.trim_end_matches(|x| x == '\'' || x == '\"').to_string();
+                    tokens.push(Token::Identifier(identifier));
+                }
                 token => {
                     let mut identifier = String::new();
                     if token.is_alphanumeric() {
