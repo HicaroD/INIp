@@ -70,6 +70,11 @@ impl Parser {
     pub fn parse<S: Into<String>>(file_path: S) -> Result<Ini, ParserError> {
         let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
+
+        for token in tokens.iter() {
+            println!("{:?}", token);
+        }
+
         let mut tokens = tokens.iter();
 
         let mut ini_file: Ini = HashMap::new();
@@ -85,7 +90,8 @@ impl Parser {
             } else if let Token::Identifier(key) = token {
                 if let Some(Token::EqualSign) = tokens.next() {
                     if let Some(Token::Identifier(value)) = tokens.next() {
-                        let last_section_added = sections.last().ok_or(ParserError::NoSectionAdded)?;
+                        let last_section_added =
+                            sections.last().ok_or(ParserError::NoSectionAdded)?;
 
                         if let Some(section) = ini_file.get_mut(last_section_added) {
                             Parser::add_value_to_section(section, key, value);
@@ -96,6 +102,8 @@ impl Parser {
                 }
             } else if let Token::Unknown(t) = token {
                 return Err(ParserError::UnexpectedToken(*t));
+            } else if let Token::EqualSign = token {
+                return Err(ParserError::UnexpectedToken('='));
             }
         }
         Ok(ini_file)
