@@ -73,4 +73,12 @@ mod tests {
         let parsed_file = Parser::parse("examples/invalid/example2.ini");
         assert!(parsed_file.is_err());
     }
+
+    #[test]
+    fn test_disable_entry_recognition() {
+        let parsed_file = Parser::parse("examples/valid/example3.ini");
+        let mut expected_result = HashMap::new();
+        expected_result.insert("section".to_string(), HashMap::new());
+        assert_eq!(parsed_file.unwrap(), expected_result);
+    }
 }
