@@ -90,9 +90,9 @@ impl Parser {
                 } else {
                     return Err(ParserError::ExpectedASectionName);
                 }
-            } else if let Token::Identifier(key) = token {
+            } else if let Token::Key(key) = token {
                 if let Some(Token::EqualSign) = tokens.next() {
-                    if let Some(Token::Identifier(value)) = tokens.next() {
+                    if let Some(Token::Value(value)) = tokens.next() {
                         let last_section_added =
                             sections.last().ok_or(ParserError::NoSectionAdded)?;
 
