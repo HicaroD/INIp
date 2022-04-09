@@ -102,6 +102,8 @@ impl Parser {
                     } else {
                         return Err(ParserError::ExpectedAnIdentifier);
                     }
+                } else {
+                    return Err(ParserError::ExpectedAnIdentifier);
                 }
             } else if let Token::Unknown(t) = token {
                 return Err(ParserError::UnexpectedToken(*t));
