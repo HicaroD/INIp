@@ -29,9 +29,6 @@ impl Lexer {
                         }
                         identifier.push(t);
                     }
-                    identifier = identifier
-                        .trim_end_matches(|x| x == '\'' || x == '\"')
-                        .to_string();
                     tokens.push(Token::Identifier(identifier));
                 }
                 token => {
