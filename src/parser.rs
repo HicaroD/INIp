@@ -12,8 +12,10 @@ type Ini = HashMap<String, Section>;
 pub enum ParserError {
     UnexpectedToken(char),
     ExpectedAnIdentifier,
+    ExpectedASectionName,
     Io(std::io::Error),
     NoSectionAdded,
+    InvalidSectionName(String),
 }
 
 impl std::error::Error for ParserError {}
@@ -31,6 +33,8 @@ impl fmt::Display for ParserError {
             ExpectedAnIdentifier => write!(f, "Expected an identifier"),
             Io(e) => write!(f, "{e}"),
             NoSectionAdded => write!(f, "Any section is available to add a key-value pair."),
+            ExpectedASectionName => write!(f, "Expected a section name"),
+            InvalidSectionName(section_name) => write!(f, "Invalid section name: {section_name}"),
         }
     }
 }
@@ -77,10 +81,14 @@ impl Parser {
 
         while let Some(token) = tokens.next() {
             if let Token::OpeningSquareBracket = token {
-                if let Some(Token::Identifier(section_name)) = tokens.next() {
+                if let Some(Token::SectionName(section_name)) = tokens.next() {
+                    if section_name.contains('[') || section_name.contains(']') {
+                        return Err(ParserError::InvalidSectionName(section_name.to_string()));
+                    }
+
                     Parser::add_section(&mut ini_file, &mut sections, section_name);
                 } else {
-                    return Err(ParserError::ExpectedAnIdentifier);
+                    return Err(ParserError::ExpectedASectionName);
                 }
             } else if let Token::Identifier(key) = token {
                 if let Some(Token::EqualSign) = tokens.next() {
