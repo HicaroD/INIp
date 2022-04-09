@@ -53,14 +53,14 @@ mod tests {
 
     #[test]
     fn test_value_with_quotes() {
-        let parsed_file = Parser::parse("examples/invalid/example2.ini");
+        let parsed_file = Parser::parse("examples/valid/example2.ini");
         let mut expected_result = HashMap::new();
         expected_result.insert(
             "section".to_string(),
             HashMap::from([("key".to_string(), ("value =".to_string()))]),
         );
         expected_result.insert(
-            "another_section".to_string(),
+            "another section".to_string(),
             HashMap::from([
                 ("key".to_string(), "hello".to_string()),
             ]),
@@ -70,7 +70,7 @@ mod tests {
 
     #[test]
     fn test_invalid_key_name_with_spaced_name() {
-        let parsed_file = Parser::parse("examples/invalid/example3.ini");
+        let parsed_file = Parser::parse("examples/invalid/example2.ini");
         assert!(parsed_file.is_err());
     }
 }
