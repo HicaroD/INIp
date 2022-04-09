@@ -2,7 +2,6 @@
 pub enum Token {
     OpeningSquareBracket,
     ClosingSquareBracket,
-    Hash,
     EqualSign,
     Identifier(String),
     Unknown(char),
@@ -20,7 +19,6 @@ impl Lexer {
                 '=' => tokens.push(Token::EqualSign),
                 '[' => tokens.push(Token::OpeningSquareBracket),
                 ']' => tokens.push(Token::ClosingSquareBracket),
-                '#' => tokens.push(Token::Hash),
                 '\'' | '\"' => {
                     let mut identifier = String::new();
                     while let Some(t) = file.next() {
