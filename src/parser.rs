@@ -38,7 +38,7 @@ impl fmt::Display for ParserError {
 pub struct Parser {}
 
 impl Parser {
-    fn read_file<S: Into<String>>(file_path: S) -> std::io::Result<String> {
+    fn read_file(file_path: impl Into<String>) -> std::io::Result<String> {
         let file = fs::File::open(file_path.into())?;
         let file_reader = BufReader::new(file);
         let mut file_content = String::new();
@@ -67,7 +67,7 @@ impl Parser {
         }
     }
 
-    pub fn parse<S: Into<String>>(file_path: S) -> Result<Ini, ParserError> {
+    pub fn parse(file_path: impl Into<String>) -> Result<Ini, ParserError> {
         let file_content = Parser::read_file(file_path)?;
         let tokens = Lexer::tokenize(file_content);
 
