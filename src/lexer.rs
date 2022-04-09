@@ -3,7 +3,8 @@ pub enum Token {
     OpeningSquareBracket,
     ClosingSquareBracket,
     EqualSign,
-    Identifier(String),
+    Value(String),
+    Key(String),
     Unknown(char),
     SectionName(String),
 }
@@ -29,14 +30,14 @@ impl Lexer {
                 },
                 ']' => tokens.push(Token::ClosingSquareBracket),
                 '\'' | '\"' => {
-                    let mut identifier = String::new();
+                    let mut value = String::new();
                     while let Some(t) = file.next() {
                         if t == '\'' || t == '\"' {
                             break;
                         }
-                        identifier.push(t);
+                        value.push(t);
                     }
-                    tokens.push(Token::Identifier(identifier));
+                    tokens.push(Token::Value(value));
                 }
                 token => {
                     let mut identifier = String::new();
@@ -47,7 +48,7 @@ impl Lexer {
                         {
                             identifier.push(t);
                         }
-                        tokens.push(Token::Identifier(identifier.trim_end().to_string()));
+                        tokens.push(Token::Key(identifier.trim_end().to_string()));
                     } else if !token.is_whitespace() {
                         tokens.push(Token::Unknown(token));
                     }
