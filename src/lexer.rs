@@ -23,7 +23,10 @@ impl Lexer {
                 '#' => tokens.push(Token::Hash),
                 '\'' | '\"' => {
                     let mut identifier = String::new();
-                    while let Some(t) = file.next_if(|x| *x != '\'' || *x != '\"') {
+                    while let Some(t) = file.next() {
+                        if t == '\'' || t == '\"' {
+                            break;
+                        }
                         identifier.push(t);
                     }
                     identifier = identifier
