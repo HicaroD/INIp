@@ -12,11 +12,14 @@ mod tests {
 
     #[test]
     fn test_lexer() {
-        let tokens = Lexer::tokenize("[hi]".to_string());
+        let tokens = Lexer::tokenize("[hi]name=\'Hicaro\'".to_string());
         let expected_tokens = vec![
             Token::OpeningSquareBracket,
             Token::SectionName("hi".to_string()),
             Token::ClosingSquareBracket,
+            Token::Key("name".to_string()),
+            Token::EqualSign,
+            Token::Value("Hicaro".to_string()),
         ];
         assert_eq!(tokens, expected_tokens);
     }
@@ -24,6 +27,7 @@ mod tests {
     #[test]
     fn test_parser_on_valid_file() {
         let parsed_file = Parser::parse("examples/valid/example.ini").unwrap();
+
         let mut expected_result = HashMap::new();
         expected_result.insert(
             "Hicaro".to_string(),
