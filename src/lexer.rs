@@ -44,7 +44,7 @@ impl Lexer {
                     if token.is_alphanumeric() {
                         identifier.push(token);
                         while let Some(t) =
-                            file.next_if(|x| x.is_alphanumeric())
+                            file.next_if(|x| x.is_alphanumeric() || *x == '_')
                         {
                             identifier.push(t);
                         }
