@@ -2,10 +2,10 @@
 pub enum Token {
     OpeningSquareBracket,
     ClosingSquareBracket,
-    Hash,
     EqualSign,
     Identifier(String),
     Unknown(char),
+    SectionName(String),
 }
 
 pub struct Lexer {}
@@ -18,9 +18,16 @@ impl Lexer {
         while let Some(token) = file.next() {
             match token {
                 '=' => tokens.push(Token::EqualSign),
-                '[' => tokens.push(Token::OpeningSquareBracket),
+                '[' => {
+                    tokens.push(Token::OpeningSquareBracket);
+
+                    let mut section_name = String::new();
+                    while let Some(t) = file.next_if(|x| *x != ']') {
+                        section_name.push(t);
+                    }
+                    tokens.push(Token::SectionName(section_name));
+                },
                 ']' => tokens.push(Token::ClosingSquareBracket),
-                '#' => tokens.push(Token::Hash),
                 '\'' | '\"' => {
                     let mut identifier = String::new();
                     while let Some(t) = file.next() {
@@ -29,9 +36,6 @@ impl Lexer {
                         }
                         identifier.push(t);
                     }
-                    identifier = identifier
-                        .trim_end_matches(|x| x == '\'' || x == '\"')
-                        .to_string();
                     tokens.push(Token::Identifier(identifier));
                 }
                 token => {
@@ -39,7 +43,7 @@ impl Lexer {
                     if token.is_alphanumeric() {
                         identifier.push(token);
                         while let Some(t) =
-                            file.next_if(|x| x.is_alphanumeric() || x.is_whitespace())
+                            file.next_if(|x| x.is_alphanumeric())
                         {
                             identifier.push(t);
                         }

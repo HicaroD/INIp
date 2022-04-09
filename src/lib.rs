@@ -15,7 +15,7 @@ mod tests {
         let tokens = Lexer::tokenize("[hi]".to_string());
         let expected_tokens = vec![
             Token::OpeningSquareBracket,
-            Token::Identifier("hi".to_string()),
+            Token::SectionName("hi".to_string()),
             Token::ClosingSquareBracket,
         ];
         assert_eq!(tokens, expected_tokens);
