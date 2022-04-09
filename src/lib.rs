@@ -91,4 +91,10 @@ mod tests {
         let parsed_file = Parser::parse("examples/valid/example4.ini");
         assert!(!parsed_file.is_err());
     }
+
+    #[test]
+    fn test_key_values() {
+        let parsed_file = Parser::parse("examples/valid/example4.ini").unwrap();
+        assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
+    }
 }
