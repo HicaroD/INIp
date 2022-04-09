@@ -19,7 +19,6 @@ full_name = "Hicaro"
 ```rust
 let parsed_file = Parser::parse("examples/valid/example4.ini").unwrap();
 assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
-"
 ```
 
 You can read valid and invalid examples on [`examples`](examples).
