@@ -33,6 +33,7 @@ You can read valid and invalid examples on [`examples`](examples).
    ```
 
 2. All values must be surrounded by quotes
+
    Valid:
    ```ini
    [section]
