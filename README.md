@@ -23,5 +23,8 @@ assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
 
 You can read valid and invalid examples on [`examples`](examples).
 
+## Contributions
+If you find any problems with this library, please let me know by opening an issue explaining the problem.
+
 ## License
 This project is licensed under the [MIT](LICENSE) license.
