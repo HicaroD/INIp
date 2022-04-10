@@ -7,6 +7,7 @@
 |----------------------------|--------------------|
 | Sections support           | :heavy_check_mark: |
 | Disabled entry recognition | :heavy_check_mark: |
+| Section nesting support    | :x:                |
 
 ## Examples
 
@@ -22,6 +23,27 @@ assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
 ```
 
 You can read valid and invalid examples on [`examples`](examples).
+
+## Rules
+
+1. Comment lines start with `;`
+   ```ini
+   ; this is a comment
+   # this is not a comment
+   ```
+
+2. All values must be surrounded by quotes
+   Valid:
+   ```ini
+   [section]
+   name = "John Doe"
+   ```
+
+   Invalid:
+   ```ini
+   [section]
+   name = John Doe
+   ```
 
 ## Contributions
 If you find any problems with this library, please let me know by opening an issue explaining the problem.
