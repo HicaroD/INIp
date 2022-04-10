@@ -53,6 +53,22 @@ You can read valid and invalid examples on [`examples`](examples).
    name = John Doe
    ```
 
+3. All key names must have one word
+
+   Valid:
+   ```ini
+   [credentials]
+   full_name = "John Doe"
+   ```
+
+   Invalid:
+   ```ini
+   [credentials]
+   full name = "John Doe"
+   ```
+
+   If you want multiple words on your key name, use whatever style you want, but don't use space to separate that.
+
 ## Contributions
 If you find any problems with this library, please let me know by opening an issue explaining the problem.
 
