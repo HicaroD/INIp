@@ -65,9 +65,7 @@ mod tests {
         );
         expected_result.insert(
             "another section".to_string(),
-            HashMap::from([
-                ("key".to_string(), "hello".to_string()),
-            ]),
+            HashMap::from([("key".to_string(), "hello".to_string())]),
         );
         assert_eq!(parsed_file.unwrap(), expected_result);
     }
@@ -87,7 +85,7 @@ mod tests {
     }
 
     #[test]
-    fn test_key_name_with_underscore(){ 
+    fn test_key_name_with_underscore() {
         let parsed_file = Parser::parse("examples/valid/example4.ini");
         assert!(!parsed_file.is_err());
     }

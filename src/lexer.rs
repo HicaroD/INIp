@@ -27,7 +27,7 @@ impl Lexer {
                         section_name.push(t);
                     }
                     tokens.push(Token::SectionName(section_name));
-                },
+                }
                 ']' => tokens.push(Token::ClosingSquareBracket),
                 '\'' | '\"' => {
                     let mut value = String::new();
@@ -43,9 +43,7 @@ impl Lexer {
                     let mut identifier = String::new();
                     if token.is_alphanumeric() {
                         identifier.push(token);
-                        while let Some(t) =
-                            file.next_if(|x| x.is_alphanumeric() || *x == '_')
-                        {
+                        while let Some(t) = file.next_if(|x| x.is_alphanumeric() || *x == '_') {
                             identifier.push(t);
                         }
                         tokens.push(Token::Key(identifier.trim_end().to_string()));
