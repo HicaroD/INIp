@@ -14,6 +14,7 @@
 | Sections support           | :heavy_check_mark: |
 | Disabled entry recognition | :heavy_check_mark: |
 | Section nesting support    | :x:                |
+| Multi-line support         | :x:                |
 
 ## Examples
 
