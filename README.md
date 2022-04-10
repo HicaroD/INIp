@@ -70,6 +70,13 @@ You can read valid and invalid examples on [`examples`](examples).
 
    If you want multiple words on your key name, use whatever style you want, but don't use space to separate that.
 
+4. Disable entry recognition by using `;`
+
+   ```ini
+   [credentials]
+   ; full_name = "John Doe"
+   ```
+
 ## Contributions
 If you find any problems with this library, please let me know by opening an issue explaining the problem.
 
