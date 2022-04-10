@@ -2,10 +2,10 @@
 :pencil: An INI parser library written in Rust.
 
 ## Summary
-    1. [Features](#features)
-    2. [Examples](#examples)
-    3. [Contributions](#contributions)
-    4. [License](#license)
+   1. [Features](#features)
+   2. [Examples](#examples)
+   3. [Contributions](#contributions)
+   4. [License](#license)
 
 ## Features
 
