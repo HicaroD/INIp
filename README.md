@@ -16,7 +16,7 @@
 | Section nesting support    | :x:                |
 | Multi-line support         | :x:                |
 
-## Examples
+## Example
 
 ```ini
 ; file.ini
