@@ -95,4 +95,14 @@ mod tests {
         let parsed_file = Parser::parse("examples/valid/example4.ini").unwrap();
         assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
     }
+
+    #[test]
+    fn test_empty_sections() {
+        let parsed_file = Parser::parse("examples/valid/example5.ini");
+        let mut expected_result = HashMap::new();
+        expected_result.insert("first section".to_string(), HashMap::new());
+        expected_result.insert("second section".to_string(), HashMap::new());
+
+        assert_eq!(parsed_file.unwrap(), expected_result);
+    }
 }
