@@ -4,8 +4,9 @@
 ## Summary
    1. [Features](#features)
    2. [Examples](#examples)
-   3. [Contributions](#contributions)
-   4. [License](#license)
+   3. [Rules](#rules)
+   4. [Contributions](#contributions)
+   5. [License](#license)
 
 ## Features
 
