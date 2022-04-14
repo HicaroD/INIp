@@ -64,7 +64,7 @@ impl Parser {
     }
 
     fn add_value_to_section<'a>(section: &mut Section, key: &'a str, value: &'a str) {
-        if section.is_empty() || !section.contains_key(key) {
+        if !section.contains_key(key) {
             section.insert(key.to_string(), value.to_string());
         } else if let Some(key_value) = section.get_mut(key) {
             *key_value = value.to_string();

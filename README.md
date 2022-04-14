@@ -3,10 +3,14 @@
 
 ## Summary
    1. [Features](#features)
-   2. [Examples](#examples)
-   3. [Rules](#rules)
-   4. [Contributions](#contributions)
-   5. [License](#license)
+   2. [Installation](#installation)
+   3. [Examples](#examples)
+   4. [Rules](#rules)
+   5. [Contributions](#contributions)
+   6. [License](#license)
+
+## Installation
+Soon.
 
 ## Features
 
