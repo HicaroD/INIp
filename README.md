@@ -9,13 +9,6 @@
    5. [Contributions](#contributions)
    6. [License](#license)
 
-## Installation
-   Add this to your `Cargo.toml`:
-
-   ```
-   inip = "0.1.0"
-   ```
-
 ## Features
 
 | Feature                    | Implemented?       |
@@ -24,6 +17,13 @@
 | Disabled entry recognition | :heavy_check_mark: |
 | Section nesting support    | :x:                |
 | Multi-line support         | :x:                |
+
+## Installation
+   Add this to your `Cargo.toml`:
+
+   ```
+   inip = "0.1.0"
+   ```
 
 ## Example
 
