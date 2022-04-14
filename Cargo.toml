@@ -1,7 +1,7 @@
 [package]
 name = "inip"
 description = "A simple INI parser library"
-version = "0.1.5"
+version = "0.2.0"
 repository = "https://github.com/HicaroD/INIp"
 license = "MIT"
 readme = "README.md"
