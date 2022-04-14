@@ -9,6 +9,7 @@
    5. [Contributions](#contributions)
    6. [License](#license)
 
+<<<<<<< HEAD
 ## Installation
    Add this to your `Cargo.toml`:
 
@@ -16,6 +17,8 @@
    inip = "0.1.0"
    ```
 
+=======
+>>>>>>> 2ac2740 ([Deploy] Changing order of topics)
 ## Features
 
 | Feature                    | Implemented?       |
