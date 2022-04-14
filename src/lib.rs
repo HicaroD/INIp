@@ -94,7 +94,10 @@ mod tests {
     fn test_key_values() {
         let parsed_file = Parser::parse("examples/valid/example4.ini").unwrap();
         assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
-        assert_eq!(parsed_file["section"]["another_key"], "Something here".to_string());
+        assert_eq!(
+            parsed_file["section"]["another_key"],
+            "Something here".to_string()
+        );
     }
 
     #[test]
