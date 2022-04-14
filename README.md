@@ -22,7 +22,7 @@
    Add this to your `Cargo.toml`:
 
    ```
-   inip = "0.1.0"
+   inip = "0.2.5"
    ```
 
 ## Example
