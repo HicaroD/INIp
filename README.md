@@ -10,7 +10,11 @@
    6. [License](#license)
 
 ## Installation
-Soon.
+   Add this to your `Cargo.toml`:
+
+   ```
+   inip = "0.1.0"
+   ```
 
 ## Features
 
@@ -30,8 +34,12 @@ full_name = "Hicaro"
 ```
 
 ```rust
-let parsed_file = Parser::parse("file.ini").unwrap();
-assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
+use inip::parser::Parser;
+
+fn main() {
+    let parsed_file = Parser::parse("file.ini").unwrap();
+    assert_eq!(parsed_file["section"]["full_name"], "Hicaro".to_string());
+}
 ```
 
 You can read valid and invalid examples on [`examples`](examples).
