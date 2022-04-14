@@ -10,11 +10,11 @@
    6. [License](#license)
 
 ## Installation
-    Add this to your `Cargo.toml`:
+   Add this to your `Cargo.toml`:
 
-    ```
-    inip = "0.1.0"
-    ```
+   ```
+   inip = "0.1.0"
+   ```
 
 ## Features
 
