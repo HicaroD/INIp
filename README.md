@@ -46,9 +46,10 @@ You can read valid and invalid examples on [`examples`](examples).
 
 ## Rules
 
-1. Comment lines start with `;`
+1. Comment lines start with `;` or it should be the first non-whitespace character of the line.
    ```ini
    ; this is a comment
+         ; This is another comment
    # this is not a comment
    ```
 
