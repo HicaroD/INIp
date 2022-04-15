@@ -48,7 +48,7 @@ impl Parser {
         let mut file_content = String::new();
 
         for line in file_reader.lines() {
-            let line_content = line?;
+            let line_content = line?.trim_start().to_string();
             if !line_content.starts_with(';') {
                 file_content.push_str(&line_content);
             }
