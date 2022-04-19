@@ -22,7 +22,7 @@
    Add this to your `Cargo.toml`:
 
    ```
-   inip = "0.2.6"
+   inip = "0.2.7"
    ```
 
 ## Example
@@ -34,7 +34,7 @@ full_name = "Hicaro"
 ```
 
 ```rust
-use inip::parser::Parser;
+use inip::Parser;
 
 fn main() {
     let parsed_file = Parser::parse("file.ini").unwrap();
