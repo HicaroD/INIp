@@ -1,14 +1,13 @@
 pub mod lexer;
 pub mod parser;
 
-use lexer::*;
-use parser::*;
-
-use std::collections::HashMap;
+pub use parser::Parser;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::lexer::*;
+    use crate::parser::*;
+    use std::collections::HashMap;
 
     #[test]
     fn test_lexer() {
