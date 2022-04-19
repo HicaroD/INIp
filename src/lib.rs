@@ -5,8 +5,8 @@ pub use parser::Parser;
 
 #[cfg(test)]
 mod tests {
-    use crate::lexer::{Token, Lexer};
-    use crate::parser::Parser;
+    use crate::lexer::*;
+    use crate::parser::*;
     use std::collections::HashMap;
 
     #[test]
